@@ -1,6 +1,8 @@
 #include<iostream>
+#include"stack.h"
 
 int main()
 {
-	std::cout << "Hello World [Stack]" << std::endl;
+	StackList myList{};
+	UserInfo(myList);
 }
