@@ -1,6 +1,8 @@
 #include<iostream>
-
+#include"Queue.h"
 int main()
 {
-	std::cout << "Hello World [Queue]" << std::endl;
+	QueueList myList{};
+
+	UserInfo(myList);
 }
