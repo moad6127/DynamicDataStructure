@@ -5,6 +5,4 @@ int main()
 {
 	StackList myStack;
 	UserInfo(myStack);
-	
-
 }

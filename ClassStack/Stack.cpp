@@ -31,7 +31,7 @@ void StackList::StackPop()
 	
 }
 
-void StackList::PrintStack()
+void StackList::PrintStack() const
 {
 	Stack* pPrint{ pmTail };
 	if (pPrint == nullptr)

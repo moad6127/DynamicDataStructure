@@ -16,16 +16,12 @@ public:
 };
 class StackList
 {
-
-
-
 	Stack* pmTail;
 public:
 	StackList();
-	void UserInfo();
 	void StackPush(const int value);
 	void StackPop();
-	void PrintStack();
+	void PrintStack() const;
 };
 
 
