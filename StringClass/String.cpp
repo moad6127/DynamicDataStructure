@@ -85,6 +85,10 @@ String& String::operator+=(const String& string)
 
 String& String::operator=(const String& string)
 {
+	if (this->mpString == string.mpString)
+	{
+		return *this;
+	}
 	mLength = string.mLength;
 	mpString = new char[mLength + 1];
 	strcpy_s(mpString, mLength + 1, string.mpString);

@@ -25,4 +25,5 @@ int main()
 	s1[3] = 'l';
 	s1[4] = 'd';
 	std::cout << s1 << std::endl;
+	s1 = s1;
 }
