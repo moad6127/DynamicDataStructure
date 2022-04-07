@@ -3,8 +3,10 @@
 
 int main()
 {
-	String myString{"hello"};
-	String myString2{ " world"};
-	String s3{ myString + myString2 };
-	s3.Print();
+	String empty;
+	String s1{ "hello" };
+	empty = s1;
+	std::cout << empty << std::endl;
+	String size{ 10 };
+
 }
