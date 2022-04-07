@@ -21,5 +21,5 @@ public:
 	
 	
 };
-std::ostream& operator<<(const std::ostream& os, const String& string);
+
 
