@@ -5,12 +5,12 @@
 
 String::String() : mLength{0}
 {
-	mpString = new char[mLength];
+	mpString = new char[mLength]{};
 }
 
 String::String(const int index) : mLength{index}
 {
-	mpString = new char[mLength];
+	mpString = new char[mLength]{};
 }
 
 String::String(const String& string)
