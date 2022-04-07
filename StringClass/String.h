@@ -12,8 +12,8 @@ public:
 	String(const String& string);
 	String(const char* string);
 	~String();
-	int GetLength();
-	char* GetString();
+	int GetLength() const;
+	char* GetString() const;
 	char* operator+(const String& string);
 	String& operator+=(const String& string);
 	String& operator=(const String& string);

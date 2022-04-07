@@ -37,12 +37,12 @@ String::~String()
 	mpString = nullptr;
 }
 
-int String::GetLength()
+int String::GetLength() const
 {
 	return mLength;
 }
 
-char* String::GetString()
+char* String::GetString() const
 {
 	return mpString;
 }
