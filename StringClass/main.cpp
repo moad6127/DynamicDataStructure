@@ -3,7 +3,8 @@
 
 int main()
 {
-	String myString{ "Hello World!!" };
-
-	myString.Print();
+	String myString{"hello"};
+	String myString2{ " world"};
+	String s3{ myString + myString2 };
+	s3.Print();
 }
