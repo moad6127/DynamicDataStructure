@@ -51,8 +51,8 @@ char* String::GetString() const
 
 char* String::operator+(const String& string)
 {
-	int stringLength{ this->mLength + string.mLength };
-	char* plusString = new char[stringLength + 1];
+
+	char* plusString = new char[this->mLength + string.mLength + 1];
 	for (int i = 0; i < this->mLength; i++)
 	{
 		plusString[i] = this->mpString[i];
@@ -67,7 +67,7 @@ char* String::operator+(const String& string)
 String& String::operator+=(const String& string)
 {
 	int newLength{ mLength + string.mLength };
-	char* temp = new char[newLength + 1];
+	char* temp = new char[mLength + string.mLength + 1];
 	for (int i = 0; i < mLength; i++)
 	{
 		temp[i] = mpString[i];
@@ -108,3 +108,4 @@ std::ostream& operator<<(std::ostream& os,const String& string)
 	os << string.mpString;
 	return os;
 }
+
