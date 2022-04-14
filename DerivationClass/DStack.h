@@ -8,7 +8,7 @@ class DStack :
 public:
     DStack();
     ~DStack() override;
-    void NewCreate(DStack* stack,int value) override;
+    void NewCreate(int value);
     void Delete() override;
     void Print() const override;
 };
