@@ -37,6 +37,12 @@ void DStack::Delete()
 	{
 		return;
 	}
+	else if (static_cast<DStack*>(this->m_pTail)->m_prev == nullptr)
+	{
+		this->m_pHead = nullptr;
+		this->m_pTail = nullptr;
+		this->mValue = NULL;
+	}
 	else
 	{
 		this->m_pTail = static_cast<DStack*>(this->m_pTail)->m_prev;

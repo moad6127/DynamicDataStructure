@@ -11,7 +11,7 @@ void UserInfo(DStack& st, DQueue& Qe)
 	{
 		std::cout << "[1] STACK" << std::endl;
 		std::cout << "[2] QUEUE" << std::endl;
-		std::cout << "[5] EXIT" << std::endl;
+		std::cout << "[3] EXIT" << std::endl;
 		std::cin >> command;
 		switch (command)
 		{
