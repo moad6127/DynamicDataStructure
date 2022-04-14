@@ -1,5 +1,6 @@
+
 #include<iostream>
-#include "Stack.h"
+#include"Stack.h"
 #include"function.h"
 
 
@@ -55,6 +56,11 @@ void StackList::PrintStack() const
 Stack::Stack() : mValue{0}, mPrev{nullptr}
 {
 }
+
+Stack::~Stack()
+{
+}
+
 
 int Stack::RetrunValue()
 {
