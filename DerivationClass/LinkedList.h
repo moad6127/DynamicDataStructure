@@ -10,8 +10,8 @@ public:
 
 	LinkedList();
 	virtual ~LinkedList();
-	virtual void NewCreate(int val);
-	virtual void Delete();
-	virtual void Print() const;
+	virtual void NewCreate(int val) =0;
+	virtual void Delete()= 0;
+	virtual void Print() const = 0;
 };
 

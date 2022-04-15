@@ -8,14 +8,4 @@ LinkedList::~LinkedList()
 {
 }
 
-void LinkedList::NewCreate(int val)
-{
-}
 
-void LinkedList::Delete()
-{
-}
-
-void LinkedList::Print() const
-{
-}
