@@ -25,9 +25,9 @@ void BitmapExample::Render()
 
 	//DrawPixelToBuffer(10, 10, D2D1::ColorF::White);
 	ClearBuffer(D2D1::ColorF::LawnGreen);
-	FillRectToBuffer(10, 10, 100, 100, D2D1::ColorF::Aquamarine);
-	DrawCircleToBuffer(200, 200, 100,  D2D1::ColorF::Aquamarine);
-
+	FillRectToBuffer(10, 10, 100, 100, D2D1::ColorF::Black);
+	DrawCircleToBuffer(200, 200, 100,  D2D1::ColorF::Black);
+	DrawLineToBuffer(500, 10, 1000, 400, D2D1::ColorF::Black);
 
 	PresentBuffer();
 
@@ -89,7 +89,8 @@ void BitmapExample::FillRectToBuffer(int left, int top, int width, int height, D
 
 void BitmapExample::DrawCircleToBuffer(int a, int b, int r, D2D1::ColorF color)
 {
-	for (double set = 0; set <= 100; set += 0.01)
+	const double PI{ 3.141592 };
+	for (double set = 0; set <= 2*PI; set += 0.01)
 	{
 		int x = a + r * cos(set);
 		int y = b + r * sin(set);
@@ -99,8 +100,17 @@ void BitmapExample::DrawCircleToBuffer(int a, int b, int r, D2D1::ColorF color)
 	}
 }
 
-//void BitmapExample::DrawLineToBuffer(int x1, int y1, int x2, int y2, D2D1::ColorF color)
-//{
-//}
+void BitmapExample::DrawLineToBuffer(int x1, int y1, int x2, int y2, D2D1::ColorF color)
+{
+	int x{min(x1,x2)};
+	int maxX{max(x1,x2)};
+
+	for (x; x <= maxX; x++)
+	{
+		int y = ((y2 - y1) / (x2 - x1)) * (x - x1) + y1;
+		DrawPixelToBuffer(x, y, color);
+	}
+
+}
 
 
