@@ -1,5 +1,5 @@
 #include "BitmapExample.h"
-
+#include <cmath>
 HRESULT BitmapExample::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT height)
 {
 	D2DFramework::Initialize(hInstance, title, width, height);
@@ -26,6 +26,9 @@ void BitmapExample::Render()
 	//DrawPixelToBuffer(10, 10, D2D1::ColorF::White);
 	ClearBuffer(D2D1::ColorF::LawnGreen);
 	FillRectToBuffer(10, 10, 100, 100, D2D1::ColorF::Aquamarine);
+	DrawCircleToBuffer(200, 200, 100,  D2D1::ColorF::Aquamarine);
+
+
 	PresentBuffer();
 
 	mspRenderTarget->DrawBitmap(mspFramBitmap.Get());
@@ -83,3 +86,21 @@ void BitmapExample::FillRectToBuffer(int left, int top, int width, int height, D
 		}
 	}
 }
+
+void BitmapExample::DrawCircleToBuffer(int a, int b, int r, D2D1::ColorF color)
+{
+	for (double set = 0; set <= 100; set += 0.01)
+	{
+		int x = a + r * cos(set);
+		int y = b + r * sin(set);
+
+		DrawPixelToBuffer(x, y, color);
+
+	}
+}
+
+//void BitmapExample::DrawLineToBuffer(int x1, int y1, int x2, int y2, D2D1::ColorF color)
+//{
+//}
+
+
