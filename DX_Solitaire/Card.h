@@ -23,7 +23,7 @@ public:
 
 	virtual void Draw() override;
 	void Flip(bool isFront);
-	bool CheckClicked(float x, float y);
+	bool CheckClicked(int x, int y);
 	inline void SetX(float x) { mX = x; }
 	inline void SetY(float y) { mY = y; }
 	inline TYPE GetType() { return mType; }

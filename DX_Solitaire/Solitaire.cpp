@@ -76,12 +76,13 @@ void Solitaire::onClick(int mouseX, int mouseY)
 				}
 				else if (pCard->GetType() == mpSelectedCrad->GetType())
 				{
-					mCardList.remove_if(
-						[&](Card& card) 
-						{
-							return (card.GetIndex() == pCard->GetIndex());
-						}
-					);
+					//mCardList.remove_if(
+					//	[&](std::unique_ptr<Card> card)
+					//	{
+					//		return (card->GetIndex() == pCard->GetIndex() ||
+					//			card->GetIndex() == mpSelectedCrad->GetIndex());
+					//	}
+					//);
 					mpSelectedCrad = nullptr;
 				}
 				else
@@ -143,25 +144,33 @@ void Solitaire::CreateCards()
 	}
 }
 
-LRESULT CALLBACK Solitaire::WinProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+int Solitaire::GameLoop()
 {
-	Solitaire* pFramewokr = reinterpret_cast<Solitaire*>
-		(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-	switch (message)
+	MSG msg{};
+	while (true)
 	{
-	case WM_LBUTTONUP:
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
 
-	case WM_CLOSE:
-		DestroyWindow(hwnd);
-		break;
-	case WM_DESTROY:
-		PostQuitMessage(0);
-		break;
-	default:
-		return DefWindowProc(hwnd, message, wParam, lParam);
+			if (msg.message == WM_QUIT)
+			{
+				break;
+			}
+			if (msg.message == WM_LBUTTONUP)
+			{
+				this->onClick(LOWORD(msg.lParam), HIWORD(msg.lParam));
+				Render();
+			}
+		}
+		else
+		{
 
+			Render();
+		}
 	}
-	return 0;
+	Release();
+
+	return static_cast<int>(msg.wParam);
 }
-
-

@@ -29,10 +29,6 @@ public:
 	void onClick(int mouseX, int mouseY);
 
 	void CreateCards();
-
-	static LRESULT CALLBACK WinProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
-
-
-
+	virtual int GameLoop() override;
 };
 
