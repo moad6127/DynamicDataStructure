@@ -2,18 +2,13 @@
 
 #include"BitmapManager.h"
 
-Card::Card(D2DFramework* pFramework, TYPE type, int index) : Actor(pFramework, L"card_back.png")
+Card::Card(D2DFramework* pFramework, int index, TYPE type, float x , float y) : Actor(pFramework,L"Data/bg_blank.png")
 {
     mType = type;
     mIndex = index;
     mIsFront = false;
-
-
-}
-
-void Card::Draw()
-{
-	//TODO 뒷면이면 뒷배경 앞면이면 타입에따라서 이미지
+	mX = x;
+	mY = y;
 	std::wstring filename(L"Data/card_creature_");
 	switch (mType)
 	{
@@ -29,20 +24,34 @@ void Card::Draw()
 		filename += L"bear.png";
 		break;
 	}
+	pCardBack = BitmapManager::Instance().LoadBitmap(filename);
+}
+
+void Card::Draw()
+{
+	//TODO 뒷면이면 뒷배경 앞면이면 타입에따라서 이미지
+
 
 	if (mIsFront)
 	{
-		mpBitmap = BitmapManager::Instance().LoadBitmap(filename);
+		
 	}
 }
 
 void Card::Flip(bool isFront)
 {
     //TODO
+	mIsFront = isFront;
 }
 
 bool Card::CheckClicked(float x, float y)
 {
     //TODO
+	if (x >= mX && x <= (mX + mpBitmap->GetSize().width) &&
+		y >= mY && y <= (mY + mpBitmap->GetSize().height))
+	{
+		Flip(!mIsFront);
+		return true;
+	}
     return false;
 }

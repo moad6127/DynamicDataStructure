@@ -4,7 +4,7 @@
 #include<list>
 
 #include"D2DFramework.h"
-#include"Actor.h"
+#include"Card.h"
 
 class Solitaire : public D2DFramework
 {

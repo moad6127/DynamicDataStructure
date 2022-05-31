@@ -1,3 +1,6 @@
+
+#include<vector>
+#include<random>
 #include "Solitaire.h"
 
 HRESULT Solitaire::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT height)
@@ -8,11 +11,9 @@ HRESULT Solitaire::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UI
 
 
 	//예제에서  초기화 필요한것
-	mActor_BG = std::make_unique<Actor>(this, L"bg_blank.png");
-	for (int i = 0; i < 40; i++)
-	{
-		mCardList.push_back(std::make_unique<Actor>(this));
-	}
+	mActor_BG = std::make_unique<Actor>(this, L"Data/bg_blank.png");
+
+	CreateCards();
 	return S_OK;
 }
 
@@ -54,4 +55,48 @@ void Solitaire::onClick(int mouseX, int mouseY)
 
 void Solitaire::CreateCards()
 {
+	//TODO: 카드 섞기
+	std::vector<TYPE> types;
+
+	while (types.size() < static_cast<size_t>(BORAD_COLUM * BORAD_ROW))
+	{
+		int temp = types.size() % 6;
+		switch (temp)
+		{
+		case 0:
+			types.push_back(TYPE::Bear);
+			types.push_back(TYPE::Bear);
+			break;
+		case 2:
+			types.push_back(TYPE::Wolf);
+			types.push_back(TYPE::Wolf);
+			break;
+		case 4:
+			types.push_back(TYPE::Dragon);
+			types.push_back(TYPE::Dragon);
+			break;
+		}
+	}
+	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	std::shuffle(types.begin(), types.end(), gen);
+
+	int index{};
+	int posX{ 15 }, posY{ 10 };
+
+	for (int x = 0; x < BORAD_COLUM; x++)
+	{
+		posY = 10;
+		for (int y = 0; y < BORAD_ROW; y++)
+		{
+			mCardList.push_back(std::make_unique<Card>(this,index,types[index++],
+				static_cast<float>(posX),
+				static_cast<float>(posY)));
+			posY += 140 + 10;
+		}
+		posX += 100 + 10;
+	}
 }
+
+
