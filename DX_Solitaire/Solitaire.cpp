@@ -35,6 +35,7 @@ void Solitaire::Render()
 	mspRenderTarget->BeginDraw();
 
 	mspRenderTarget->Clear(D2D1::ColorF(0.0f, 0.2f, 0.4f, 1.0f));
+	
 
 	//예제에서 그릴것들
 	mActor_BG->Draw();
@@ -174,6 +175,32 @@ int Solitaire::GameLoop()
 			{
 				this->onClick(LOWORD(msg.lParam), HIWORD(msg.lParam));
 				Render();
+				if (this->GetSize() == 0)
+				{
+					// 영어 메시지
+					/*if (MessageBox(hwnd, L"GOOD! you have completed the game!! \n"
+						L" You want to end the game?", L"END GAME", MB_ICONQUESTION | MB_YESNO) == IDYES)*/
+						//한글 메시지
+					if (MessageBox(this->GetWindowHandle(), L"게임이 끝났습니다! \n"
+						L"게임을 종료 하시겠습니까?", L"END GAME", MB_ICONQUESTION | MB_YESNO) == IDYES)
+					{
+						DestroyWindow(this->GetWindowHandle());
+					}
+					else
+					{
+						//영어 메시지
+						/*if (MessageBox(hwnd, L"Do you want to play the game again?", L"CHECK", MB_YESNO) == IDYES)*/
+						//한글 메시지
+						if (MessageBox(this->GetWindowHandle(), L"게임을 다시 하시겠습니까?", L"CHECK", MB_YESNO) == IDYES)
+						{
+							CreateCards();
+						}
+						else
+						{
+							DestroyWindow(this->GetWindowHandle());
+						}
+					}
+				}
 			}
 		}
 		else

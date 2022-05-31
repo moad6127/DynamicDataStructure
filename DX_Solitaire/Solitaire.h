@@ -30,5 +30,6 @@ public:
 
 	void CreateCards();
 	virtual int GameLoop() override;
+	inline size_t GetSize() { return mCardList.size(); }
 };
 
