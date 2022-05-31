@@ -23,11 +23,13 @@ public:
 
 	virtual void Draw() override;
 	void Flip(bool isFront);
-	bool CheckClicked(int x, int y);
+	bool CheckClicked(float x, float y);
 	inline void SetX(float x) { mX = x; }
 	inline void SetY(float y) { mY = y; }
 	inline TYPE GetType() { return mType; }
 	inline int GetIndex() { return mIndex; }
+
+
 
 };
 

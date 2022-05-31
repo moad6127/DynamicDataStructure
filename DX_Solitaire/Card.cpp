@@ -56,7 +56,7 @@ void Card::Flip(bool isFront)
 	mIsFront = isFront;
 }
 
-bool Card::CheckClicked(int x, int y)
+bool Card::CheckClicked(float x, float y)
 {
 	if (x >= mX && x <= (mX + mpBitmap->GetSize().width) &&
 		y >= mY && y <= (mY + mpBitmap->GetSize().height))

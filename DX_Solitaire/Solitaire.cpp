@@ -3,6 +3,7 @@
 #include<random>
 #include "Solitaire.h"
 
+
 HRESULT Solitaire::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT height)
 {
 	HRESULT hr;
@@ -54,49 +55,60 @@ void Solitaire::onClick(int mouseX, int mouseY)
 	Card* pCard{};
 	for (auto& card : mCardList)
 	{
-		if(card->CheckClicked(
-			static_cast<float>(mouseX), 
+		if (card->CheckClicked(
+			static_cast<float>(mouseX),
 			static_cast<float>(mouseY)))
 		{
 			pCard = card.get();
 			break;
 		}
-		if (pCard)
+	}
+	if (pCard)
+	{
+		mFlipCount++;
+		if (mpSelectedCrad == nullptr)
 		{
-			mFlipCount++;
-			if (mpSelectedCrad == nullptr)
+			mpSelectedCrad = pCard;
+		}
+		else
+		{
+			if (pCard == mpSelectedCrad)
 			{
-				mpSelectedCrad = pCard;
+				mpSelectedCrad = nullptr;
+			}
+			else if (pCard->GetType() == mpSelectedCrad->GetType())
+			{
+				for (auto& card : mCardList)
+				{
+					if (card->GetIndex() == pCard->GetIndex())
+					{
+						mCardList.remove(card);
+						break;
+					}
+				}
+				for (auto& card : mCardList)
+				{
+					if (card->GetIndex() == mpSelectedCrad->GetIndex())
+					{
+						mCardList.remove(card);
+						break;
+					}
+				}
+				mpSelectedCrad = nullptr;
 			}
 			else
 			{
-				if (pCard == mpSelectedCrad)
-				{
-					mpSelectedCrad = nullptr;
-				}
-				else if (pCard->GetType() == mpSelectedCrad->GetType())
-				{
-					//mCardList.remove_if(
-					//	[&](std::unique_ptr<Card> card)
-					//	{
-					//		return (card->GetIndex() == pCard->GetIndex() ||
-					//			card->GetIndex() == mpSelectedCrad->GetIndex());
-					//	}
-					//);
-					mpSelectedCrad = nullptr;
-				}
-				else
-				{
-					Sleep(500);
-					pCard->Flip(false);
-					mpSelectedCrad->Flip(false);
+				Render();
+				Sleep(500);
+				pCard->Flip(false);
+				mpSelectedCrad->Flip(false);
 
-					mpSelectedCrad = nullptr;
-				}
+				mpSelectedCrad = nullptr;
 			}
 		}
 	}
 }
+
 
 void Solitaire::CreateCards()
 {
