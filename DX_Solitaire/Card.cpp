@@ -2,7 +2,7 @@
 
 #include"BitmapManager.h"
 
-Card::Card(D2DFramework* pFramework, int index, TYPE type, float x , float y) : Actor(pFramework,L"Data/bg_blank.png")
+Card::Card(D2DFramework* pFramework, int index, TYPE type, float x , float y) : Actor(pFramework,L"Data/card_back.png")
 {
     mType = type;
     mIndex = index;
@@ -24,18 +24,13 @@ Card::Card(D2DFramework* pFramework, int index, TYPE type, float x , float y) : 
 		filename += L"bear.png";
 		break;
 	}
-	pCardBack = BitmapManager::Instance().LoadBitmap(filename);
+	pCardFront = BitmapManager::Instance().LoadBitmap(filename);
 }
 
 void Card::Draw()
 {
 	//TODO 뒷면이면 뒷배경 앞면이면 타입에따라서 이미지
-
-
-	if (mIsFront)
-	{
-		
-	}
+	Actor::Draw();
 }
 
 void Card::Flip(bool isFront)

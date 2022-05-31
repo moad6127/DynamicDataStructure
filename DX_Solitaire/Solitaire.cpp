@@ -51,6 +51,50 @@ void Solitaire::Render()
 
 void Solitaire::onClick(int mouseX, int mouseY)
 {
+	Card* pCard{};
+	for (auto& card : mCardList)
+	{
+		if(card->CheckClicked(
+			static_cast<float>(mouseX), 
+			static_cast<float>(mouseY)))
+		{
+			pCard = card.get();
+			break;
+		}
+		if (pCard)
+		{
+			mFlipCount++;
+			if (mpSelectedCrad == nullptr)
+			{
+				mpSelectedCrad = pCard;
+			}
+			else
+			{
+				if (pCard == mpSelectedCrad)
+				{
+					mpSelectedCrad = nullptr;
+				}
+				else if (pCard->GetType() == mpSelectedCrad->GetType())
+				{
+					mCardList.remove_if(
+						[&](Card& card) 
+						{
+							return (card.GetIndex() == pCard->GetIndex());
+						}
+					);
+					mpSelectedCrad = nullptr;
+				}
+				else
+				{
+					Sleep(500);
+					pCard->Flip(false);
+					mpSelectedCrad->Flip(false);
+
+					mpSelectedCrad = nullptr;
+				}
+			}
+		}
+	}
 }
 
 void Solitaire::CreateCards()
@@ -97,6 +141,27 @@ void Solitaire::CreateCards()
 		}
 		posX += 100 + 10;
 	}
+}
+
+LRESULT CALLBACK Solitaire::WinProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	Solitaire* pFramewokr = reinterpret_cast<Solitaire*>
+		(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+	switch (message)
+	{
+	case WM_LBUTTONUP:
+
+	case WM_CLOSE:
+		DestroyWindow(hwnd);
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		return DefWindowProc(hwnd, message, wParam, lParam);
+
+	}
+	return 0;
 }
 
 

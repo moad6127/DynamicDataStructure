@@ -15,7 +15,7 @@ class Card : public Actor
 	bool mIsFront;
 	TYPE mType;
 
-	ID2D1Bitmap* pCardBack;
+	ID2D1Bitmap* pCardFront;
 
 
 public:
@@ -26,6 +26,8 @@ public:
 	bool CheckClicked(float x, float y);
 	inline void SetX(float x) { mX = x; }
 	inline void SetY(float y) { mY = y; }
+	inline TYPE GetType() { return mType; }
+	inline int GetIndex() { return mIndex; }
 
 };
 

@@ -11,9 +11,11 @@ class Solitaire : public D2DFramework
 protected:
 
 	std::unique_ptr<Actor> mActor_BG;
-	std::list<std::unique_ptr<Actor>> mCardList;
+	std::list<std::unique_ptr<Card>> mCardList;
 	const int BORAD_COLUM = 8;
 	const int BORAD_ROW = 5;
+
+	Card* mpSelectedCrad;
 
 	int mFlipCount;
 
@@ -27,6 +29,9 @@ public:
 	void onClick(int mouseX, int mouseY);
 
 	void CreateCards();
+
+	static LRESULT CALLBACK WinProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+
 
 
 };
