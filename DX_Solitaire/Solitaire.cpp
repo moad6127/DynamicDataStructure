@@ -1,8 +1,10 @@
 
 #include<vector>
 #include<random>
+#include<dwrite.h>
 #include "Solitaire.h"
 
+#pragma comment (lib,"dwrite.lib")
 
 HRESULT Solitaire::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT height)
 {
@@ -43,6 +45,43 @@ void Solitaire::Render()
 	{
 		e->Draw();
 	}
+	Microsoft::WRL::ComPtr<IDWriteFactory> mspDWriteFactroy;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> mspBrush;
+	Microsoft::WRL::ComPtr<IDWriteTextFormat> mspWForamt;
+	hr = mspRenderTarget->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Red), mspBrush.GetAddressOf()
+	);
+	ThrowIfFailed(hr);
+
+	hr = DWriteCreateFactory(
+		DWRITE_FACTORY_TYPE_SHARED,
+		__uuidof(IDWriteFactory),
+		reinterpret_cast<IUnknown**> (mspDWriteFactroy.GetAddressOf())
+	);
+	ThrowIfFailed(hr);
+	hr = mspDWriteFactroy->CreateTextFormat(
+		L"Gabriola",
+		NULL,
+		DWRITE_FONT_WEIGHT_HEAVY,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		30,
+		L"test",
+		mspWForamt.GetAddressOf());
+
+	mspRenderTarget->DrawText(
+		L"클릭수 :",
+		7,
+		mspWForamt.Get(),
+		D2D1::RectF(895.0f, 20.0f, 1000.0f, 60.0f), mspBrush.Get()
+	);
+	mspRenderTarget->DrawText(
+		std::to_wstring(mFlipCount).c_str(),
+		static_cast<UINT>(std::to_wstring(mFlipCount).size()),
+		mspWForamt.Get(),
+		D2D1::RectF(895.0f, 60.0f, 1000.0f, 100.0f),
+		mspBrush.Get()
+	);
 
 	hr = mspRenderTarget->EndDraw();
 	if (hr == D2DERR_RECREATE_TARGET)
@@ -50,6 +89,7 @@ void Solitaire::Render()
 		CreateDeviceResources();
 	}
 }
+
 
 void Solitaire::onClick(int mouseX, int mouseY)
 {
@@ -79,6 +119,9 @@ void Solitaire::onClick(int mouseX, int mouseY)
 			}
 			else if (pCard->GetType() == mpSelectedCrad->GetType())
 			{
+				//Lamda ,remove_if를 쓰면 오류가 생겨서 
+				//for문으로 타입이 같은것을 제거하기
+
 				for (auto& card : mCardList)
 				{
 					if (card->GetIndex() == pCard->GetIndex())
@@ -194,6 +237,7 @@ int Solitaire::GameLoop()
 						if (MessageBox(this->GetWindowHandle(), L"게임을 다시 하시겠습니까?", L"CHECK", MB_YESNO) == IDYES)
 						{
 							CreateCards();
+							mFlipCount = 0;
 						}
 						else
 						{
