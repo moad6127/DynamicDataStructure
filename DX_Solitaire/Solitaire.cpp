@@ -12,6 +12,28 @@ HRESULT Solitaire::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UI
 	hr = D2DFramework::Initialize(hInstance, title, width, height);
 	ThrowIfFailed(hr);
 
+	hr = mspRenderTarget->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Red), mspBrush.GetAddressOf()
+	);
+	ThrowIfFailed(hr);
+
+	hr = DWriteCreateFactory(
+		DWRITE_FACTORY_TYPE_SHARED,
+		__uuidof(IDWriteFactory),
+		reinterpret_cast<IUnknown**> (mspDWriteFactroy.GetAddressOf())
+	);
+	ThrowIfFailed(hr);
+	hr = mspDWriteFactroy->CreateTextFormat(
+		L"Gabriola",
+		NULL,
+		DWRITE_FONT_WEIGHT_HEAVY,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		30,
+		L"test",
+		mspWForamt.GetAddressOf());
+	ThrowIfFailed(hr);
+
 
 	//예제에서  초기화 필요한것
 	mActor_BG = std::make_unique<Actor>(this, L"Data/bg_blank.png");
@@ -45,29 +67,6 @@ void Solitaire::Render()
 	{
 		e->Draw();
 	}
-	Microsoft::WRL::ComPtr<IDWriteFactory> mspDWriteFactroy;
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> mspBrush;
-	Microsoft::WRL::ComPtr<IDWriteTextFormat> mspWForamt;
-	hr = mspRenderTarget->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF::Red), mspBrush.GetAddressOf()
-	);
-	ThrowIfFailed(hr);
-
-	hr = DWriteCreateFactory(
-		DWRITE_FACTORY_TYPE_SHARED,
-		__uuidof(IDWriteFactory),
-		reinterpret_cast<IUnknown**> (mspDWriteFactroy.GetAddressOf())
-	);
-	ThrowIfFailed(hr);
-	hr = mspDWriteFactroy->CreateTextFormat(
-		L"Gabriola",
-		NULL,
-		DWRITE_FONT_WEIGHT_HEAVY,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		30,
-		L"test",
-		mspWForamt.GetAddressOf());
 
 	mspRenderTarget->DrawText(
 		L"클릭수 :",

@@ -5,6 +5,7 @@
 
 #include"D2DFramework.h"
 #include"Card.h"
+#include<dwrite.h>
 
 class Solitaire : public D2DFramework
 {
@@ -16,6 +17,10 @@ protected:
 	const int BORAD_ROW = 5;
 
 	Card* mpSelectedCrad;
+
+	Microsoft::WRL::ComPtr<IDWriteFactory> mspDWriteFactroy;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> mspBrush;
+	Microsoft::WRL::ComPtr<IDWriteTextFormat> mspWForamt;
 
 	int mFlipCount;
 
