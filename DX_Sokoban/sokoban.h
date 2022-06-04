@@ -12,12 +12,14 @@ class sokoban : public D2DFramework
 	
 protected:
 	const int START_COLUM = 13;
-	const int START_ROW = 7;
+	const int START_ROW = 9;
 	const float BOX_SIZE{ 64.0f };
 	const float GAME_BEGIN_X{ 100.0f };
-	const float GAME_BEGIN_Y{ 200.0f };
-	std::unique_ptr<Actor> mspGame_BG;
-	std::list<std::unique_ptr<Actor>> mspsokoban_BG;
+	const float GAME_BEGIN_Y{ 150.0f };
+
+	std::list<std::unique_ptr<Actor>> mspSokoban_BG;
+	std::list<std::unique_ptr<Actor>> mspSokoban_Block;
+
 
 
 public:

@@ -7,15 +7,22 @@ HRESULT sokoban::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT
 	hr = D2DFramework::Initialize(hInstance, title, width, height);
 	ThrowIfFailed(hr);
 
-	mspGame_BG = std::make_unique<Actor>(this, L"Data/bg_blank.png");
 	float posX{ GAME_BEGIN_X }, posY{ GAME_BEGIN_Y };
 
-	for (int x = 1; x <= START_COLUM; x++)
+	for (int x = 0; x < START_COLUM; x++)
 	{
 		posY = GAME_BEGIN_Y;
-		for (int y = 1; y <= START_ROW; y++)
+		for (int y = 0; y < START_ROW; y++)
 		{
-			mspsokoban_BG.push_back(std::make_unique<Actor>(this, L"Data/Ground.png", posX, posY));
+			if (posX == GAME_BEGIN_X || posY == GAME_BEGIN_Y ||
+				x == (START_COLUM-1) || y == (START_ROW-1))
+			{
+				mspSokoban_Block.push_back(std::make_unique<Actor>(this, L"Data/Game_Block.png", posX, posY));
+			}
+			else
+			{
+				mspSokoban_BG.push_back(std::make_unique<Actor>(this, L"Data/Game_Ground.png", posX, posY));
+			}
 			posY += BOX_SIZE;
 		}
 		posX += BOX_SIZE;
@@ -26,7 +33,15 @@ HRESULT sokoban::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT
 
 void sokoban::Release()
 {
-	mspGame_BG.reset();
+
+	for (auto& e : mspSokoban_BG)
+	{
+		e.reset();
+	}
+	for (auto& e : mspSokoban_Block)
+	{
+		e.reset();
+	}
 	D2DFramework::Release();
 }
 
@@ -37,8 +52,11 @@ void sokoban::Render()
 	mspRenderTarget->BeginDraw();
 	mspRenderTarget->Clear(D2D1::ColorF(0.0f, 0.2f, 0.4f, 1.0f));
 
-	mspGame_BG->Draw();
-	for (auto& e : mspsokoban_BG)
+	for (auto& e : mspSokoban_BG)
+	{
+		e->Draw();
+	}
+	for (auto& e : mspSokoban_Block)
 	{
 		e->Draw();
 	}
