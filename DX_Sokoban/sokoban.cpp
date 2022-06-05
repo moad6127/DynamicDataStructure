@@ -68,3 +68,32 @@ void sokoban::Render()
 
 	mspRenderTarget->EndDraw();
 }
+
+int sokoban::GameLoop()
+{
+	MSG msg{};
+	while (true)
+	{
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+
+			if (msg.message == WM_QUIT)
+			{
+				break;
+			}
+			if (msg.message == WM_KEYDOWN)
+			{
+				mspSokoban_Player->Move(msg.wParam);
+			}
+		}
+		else
+		{
+			Render();
+		}
+	}
+	Release();
+
+	return static_cast<int>(msg.wParam);
+}

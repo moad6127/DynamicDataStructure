@@ -30,5 +30,7 @@ public:
 
 	virtual void Release() override;
 	virtual void Render() override;
+
+	virtual int GameLoop() override;
 };
 

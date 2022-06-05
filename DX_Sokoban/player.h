@@ -10,6 +10,7 @@ enum class Status {
 class player : public Actor
 {
 protected:
+	const float BOX_SIZE{ 64.0f };
 	const float START_X{420.0f};
 	const float START_Y{476.0f};
 	Status mStatus;
@@ -21,7 +22,7 @@ protected:
 public:
 	player(D2DFramework* pFramework);
 	virtual void Draw() override;
-	virtual void Move();
+	virtual void Move(WPARAM key);
 
 	inline Status GetStatus() { return mStatus; }
 	inline void SetStatus(Status status) { mStatus = status; }
