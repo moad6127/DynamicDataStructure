@@ -23,7 +23,7 @@ protected:
 	std::unique_ptr<player> mspSokoban_Player;
 	std::list<std::unique_ptr<Box>> mspSokoban_Box;
 
-
+	Status mPlayerStatus;
 
 public:
 
@@ -34,5 +34,8 @@ public:
 	virtual void Render() override;
 
 	virtual int GameLoop() override;
+
+	virtual bool MoveCheck(WPARAM key);
+
 };
 

@@ -10,6 +10,11 @@ player::player(D2DFramework* pFramework) : Actor(pFramework, L"Data/Game_Player_
 	mStatus = Status::Front;
 	mMoveCheck = true;
 
+	mPlayer_Position.bottom = mY + BOX_SIZE;
+	mPlayer_Position.left = mX;
+	mPlayer_Position.right = mX + BOX_SIZE;
+	mPlayer_Position.top = mY;
+
 	mpBack = BitmapManager::Instance().LoadBitmap(L"Data/Game_Player_Back.png");
 	mpLeft = BitmapManager::Instance().LoadBitmap(L"Data/Game_Player_Left.png");
 	mpRight = BitmapManager::Instance().LoadBitmap(L"Data/Game_Player_Right.png");
@@ -130,4 +135,8 @@ void player::Move(WPARAM key)
 	default:
 		break;
 	}
+	mPlayer_Position.bottom = mY + BOX_SIZE;
+	mPlayer_Position.left = mX;
+	mPlayer_Position.right = mX + BOX_SIZE;
+	mPlayer_Position.top = mY;
 }

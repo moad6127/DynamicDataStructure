@@ -35,6 +35,8 @@ HRESULT sokoban::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT
 	{
 		mspSokoban_Box.push_back(std::make_unique<Box>(this));
 	}
+
+	mPlayerStatus = mspSokoban_Player->GetStatus();
 	return S_OK;
 }
 
@@ -104,7 +106,11 @@ int sokoban::GameLoop()
 			}
 			if (msg.message == WM_KEYDOWN)
 			{
-				mspSokoban_Player->Move(msg.wParam);
+				if (MoveCheck(msg.wParam))
+				{
+					mspSokoban_Player->Move(msg.wParam);
+				}
+				
 			}
 		}
 		else
@@ -115,4 +121,44 @@ int sokoban::GameLoop()
 	Release();
 
 	return static_cast<int>(msg.wParam);
+}
+
+bool sokoban::MoveCheck(WPARAM key)
+{
+	for (auto& e : mspSokoban_Box)
+	{
+		D2D1_RECT_F boxRect{ e->GetRect() };
+		D2D1_RECT_F playerRect{ mspSokoban_Player->GetRect() };
+
+		switch (mspSokoban_Player->GetStatus())
+		{
+		case Status::Front:
+			if ((boxRect.top == playerRect.bottom && boxRect.left == playerRect.left ) && key ==0x53)
+			{
+				
+				return false;
+			}
+			break;
+		case Status::Back:
+			if ((boxRect.bottom == playerRect.top && boxRect.left == playerRect.left) && key == 0x57)
+			{
+				return false;
+			}
+			break;
+		case Status::Left:
+			if( (boxRect.right == playerRect.left && boxRect.top == playerRect.top) && key == 0x41)
+			{
+				return false;
+			}
+			break;
+		case Status::Right:
+			if ((boxRect.left == playerRect.right && boxRect.top == playerRect.top) &&key == 0x44)
+			{
+				return false;
+			}
+			break;
+		}
+	}
+
+	return true;
 }

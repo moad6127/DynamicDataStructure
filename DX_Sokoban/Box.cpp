@@ -11,10 +11,12 @@ Box::Box(D2DFramework* pFramework) :Actor(pFramework, L"Data/Game_Box.png")
 
 	mX = (GAME_BEGIN_X + static_cast<float> (distX(gen)) * BOX_SIZE);
 	mY = (GAME_BEGIN_Y + static_cast<float> (distY(gen)) * BOX_SIZE);
-	mBox_Top = mY;
-	mBox_Bottom = mY + BOX_SIZE;
-	mBox_Left = mX;
-	mBox_Right = mX + BOX_SIZE;
+
+	mBox_Position.bottom	= mY + BOX_SIZE;
+	mBox_Position.left		= mX;
+	mBox_Position.right		= mX + BOX_SIZE;
+	mBox_Position.top		= mY;
+
 	mMoveCheck = true;
 
 
@@ -37,4 +39,10 @@ void Box::Draw()
 		mpBitmap,
 		rect,
 		1.0f);
+
+	mBox_Position.bottom = mY + BOX_SIZE;
+	mBox_Position.left = mX;
+	mBox_Position.right = mX + BOX_SIZE;
+	mBox_Position.top = mY;
+
 }

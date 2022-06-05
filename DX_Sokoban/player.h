@@ -17,7 +17,12 @@ protected:
 	const float BOX_SIZE{ 64.0f };
 	const float START_X{548.0f};
 	const float START_Y{470.0f};
+
+
 	Status mStatus;
+
+	D2D1_RECT_F mPlayer_Position;
+
 	bool mMoveCheck;
 
 	ID2D1Bitmap* mpBack;
@@ -37,6 +42,7 @@ public:
 
 	inline Status GetStatus() { return mStatus; }
 	inline void SetStatus(Status status) { mStatus = status; }
+	inline D2D1_RECT_F GetRect() { return mPlayer_Position; }
 
 
 
