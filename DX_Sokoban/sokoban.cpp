@@ -27,6 +27,7 @@ HRESULT sokoban::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT
 		}
 		posX += BOX_SIZE;
 	}
+	mspSokoban_Player = std::make_unique<player>(this);
 
 	return S_OK;
 }
@@ -51,6 +52,9 @@ void sokoban::Render()
 
 	mspRenderTarget->BeginDraw();
 	mspRenderTarget->Clear(D2D1::ColorF(0.0f, 0.2f, 0.4f, 1.0f));
+	mspRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+
+
 
 	for (auto& e : mspSokoban_BG)
 	{
@@ -60,6 +64,7 @@ void sokoban::Render()
 	{
 		e->Draw();
 	}
+	mspSokoban_Player->Draw();
 
 	mspRenderTarget->EndDraw();
 }

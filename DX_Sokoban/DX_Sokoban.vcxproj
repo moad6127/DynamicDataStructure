@@ -144,6 +144,7 @@
     <ClCompile Include="ComExecption.cpp" />
     <ClCompile Include="D2DFramework.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="player.cpp" />
     <ClCompile Include="sokoban.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +152,7 @@
     <ClInclude Include="BitmapManager.h" />
     <ClInclude Include="ComExecption.h" />
     <ClInclude Include="D2DFramework.h" />
+    <ClInclude Include="player.h" />
     <ClInclude Include="sokoban.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
