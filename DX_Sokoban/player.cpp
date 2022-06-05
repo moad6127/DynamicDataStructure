@@ -1,16 +1,19 @@
 #include "player.h"
 #include"BitmapManager.h"
-
+#include <sstream>
 
 player::player(D2DFramework* pFramework) : Actor(pFramework, L"Data/Game_Player_base.png")
 {
 	mX = START_X;
 	mY = START_Y;
-	mpTempBitmap = mpBitmap;
+
 	mStatus = Status::Front;
+	mMoveCheck = true;
+
 	mpBack = BitmapManager::Instance().LoadBitmap(L"Data/Game_Player_Back.png");
 	mpLeft = BitmapManager::Instance().LoadBitmap(L"Data/Game_Player_Left.png");
 	mpRight = BitmapManager::Instance().LoadBitmap(L"Data/Game_Player_Right.png");
+	mpTempBitmap = mpBitmap;
 	
 }
 
@@ -55,46 +58,73 @@ void player::Move(WPARAM key)
 	switch (key)
 	{
 
-	case 0x41: 
-		if (!(mStatus == Status::Left))
+	case 0x41:  //A
+		if (mStatus != Status::Left)
 		{
 			mStatus = Status::Left;
 		}
 		else
 		{
-			mX -= BOX_SIZE;
+			if (mX != PLAYER_X_LEFT)
+			{
+				mX -= BOX_SIZE;
+			}
+			
+			std::wostringstream oss;
+			oss << mX << "," << mY << std::endl;
+			OutputDebugString(oss.str().c_str());
 		}
 		break;
-	case 0x57:	
+	case 0x57:	//W
 
-		if (!(mStatus == Status::Back))
+		if (mStatus != Status::Back)
 		{
 			mStatus = Status::Back;
 		}
 		else
 		{
-			mY -= BOX_SIZE;
+			if (mY != PLAYER_Y_TOP)
+			{
+				mY -= BOX_SIZE ;
+			}
+			std::wostringstream oss;
+			oss << mX << "," << mY << std::endl;
+			OutputDebugString(oss.str().c_str());
 		}
 		break;
-	case 0x53:	
-		if (!(mStatus == Status::Front))
+	case 0x53:	//S
+		if (mStatus != Status::Front)
 		{
 			mStatus = Status::Front;
 		}
 		else
 		{
-			mY += BOX_SIZE;
+			if (mY != PLAYER_Y_BOTTOM)
+			{
+				mY += BOX_SIZE;
+			}
+			std::wostringstream oss;
+			oss << mX << "," << mY << std::endl;
+			OutputDebugString(oss.str().c_str());
+			
 		}
 		
 		break;
-	case 0x44:	
-		if (!(mStatus == Status::Right))
+	case 0x44:	//D
+		if (mStatus != Status::Right)
 		{
 			mStatus = Status::Right;
 		}
 		else
 		{
-			mX += BOX_SIZE;
+			if (mX != PLAYER_X_RIGHT)
+			{
+				mX += BOX_SIZE;
+			}
+			
+			std::wostringstream oss;
+			oss << mX << "," << mY << std::endl;
+			OutputDebugString(oss.str().c_str());
 		}
 		break;
 	default:
