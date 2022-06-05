@@ -3,6 +3,8 @@
 HRESULT sokoban::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT height)
 {
 
+
+
 	HRESULT hr;
 	hr = D2DFramework::Initialize(hInstance, title, width, height);
 	ThrowIfFailed(hr);
@@ -29,20 +31,33 @@ HRESULT sokoban::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT
 	}
 	mspSokoban_Player = std::make_unique<player>(this);
 
+	for (int i = 0; i < 5; i++)
+	{
+		mspSokoban_Box.push_back(std::make_unique<Box>(this));
+	}
 	return S_OK;
 }
 
 void sokoban::Release()
 {
+	for (auto& e : mspSokoban_Box)
+	{
+		e.reset();
+	}
+	mspSokoban_Player.reset();
+
+	for (auto& e : mspSokoban_Block)
+	{
+		e.reset();
+	}
 
 	for (auto& e : mspSokoban_BG)
 	{
 		e.reset();
 	}
-	for (auto& e : mspSokoban_Block)
-	{
-		e.reset();
-	}
+
+
+
 	D2DFramework::Release();
 }
 
@@ -65,6 +80,10 @@ void sokoban::Render()
 		e->Draw();
 	}
 	mspSokoban_Player->Draw();
+	for (auto& e : mspSokoban_Box)
+	{
+		e->Draw();
+	}
 
 	mspRenderTarget->EndDraw();
 }

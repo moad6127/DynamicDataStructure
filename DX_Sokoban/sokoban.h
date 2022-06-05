@@ -5,6 +5,7 @@
 
 #include "D2DFramework.h"
 #include "player.h"
+#include "Box.h"
 
 
 class sokoban : public D2DFramework
@@ -20,6 +21,7 @@ protected:
 	std::list<std::unique_ptr<Actor>> mspSokoban_BG;
 	std::list<std::unique_ptr<Actor>> mspSokoban_Block;
 	std::unique_ptr<player> mspSokoban_Player;
+	std::list<std::unique_ptr<Box>> mspSokoban_Box;
 
 
 
