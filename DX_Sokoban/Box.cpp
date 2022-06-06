@@ -46,3 +46,26 @@ void Box::Draw()
 	mBox_Position.top = mY;
 
 }
+
+bool Box::MoveCheck(WPARAM key)
+{
+	switch (key)
+	{
+	case 0x41://A
+		mX -= BOX_SIZE;
+		break;
+	case 0x57://W
+		mY -= BOX_SIZE;
+		break;
+	case 0x53://S
+		mY += BOX_SIZE;
+		break;
+	case 0x44://D
+		mX += BOX_SIZE;
+		break;
+
+	default:
+		break;
+	}
+	return false;
+}

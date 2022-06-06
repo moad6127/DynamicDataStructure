@@ -15,8 +15,9 @@ public:
 
 	Box(D2DFramework* pFramework);
 	virtual void Draw() override;
-	bool MoveCheck();
+	bool MoveCheck(WPARAM key);
 
 	inline D2D1_RECT_F GetRect() { return mBox_Position; }
+	inline void SetMoveCheck(bool check) { mMoveCheck = check; }
 };
 

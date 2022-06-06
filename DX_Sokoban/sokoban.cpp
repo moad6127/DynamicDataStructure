@@ -135,25 +135,28 @@ bool sokoban::MoveCheck(WPARAM key)
 		case Status::Front:
 			if ((boxRect.top == playerRect.bottom && boxRect.left == playerRect.left ) && key ==0x53)
 			{
-				
+				e->MoveCheck(key);
 				return false;
 			}
 			break;
 		case Status::Back:
 			if ((boxRect.bottom == playerRect.top && boxRect.left == playerRect.left) && key == 0x57)
 			{
+				e->MoveCheck(key);
 				return false;
 			}
 			break;
 		case Status::Left:
 			if( (boxRect.right == playerRect.left && boxRect.top == playerRect.top) && key == 0x41)
 			{
+				e->MoveCheck(key);
 				return false;
 			}
 			break;
 		case Status::Right:
 			if ((boxRect.left == playerRect.right && boxRect.top == playerRect.top) &&key == 0x44)
 			{
+				e->MoveCheck(key);
 				return false;
 			}
 			break;
