@@ -2,6 +2,7 @@
 
 #include<memory>
 #include<list>
+#include<dwrite.h>
 
 #include "D2DFramework.h"
 #include "player.h"
@@ -27,6 +28,12 @@ protected:
 
 	Status mPlayerStatus;
 
+
+	Microsoft::WRL::ComPtr<IDWriteFactory> mspDWriteFactroy;
+	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> mspBrush;
+	Microsoft::WRL::ComPtr<IDWriteTextFormat> mspWForamt;
+	int resetCount;
+
 public:
 
 	virtual HRESULT Initialize(HINSTANCE hInstance, LPCWSTR title = L"Sokoban Game",
@@ -34,12 +41,15 @@ public:
 
 	virtual void Release() override;
 	virtual void Render() override;
-
+	
 	virtual int GameLoop() override;
 
 	virtual bool MoveBox(WPARAM key);
 
 	virtual void Check(std::list<std::unique_ptr<Box>>& boxList, std::list<std::unique_ptr<Point>>& pointList);
+
+	void GameStart();
+	void Reset();
 
 };
 

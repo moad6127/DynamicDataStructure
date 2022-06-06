@@ -1,83 +1,86 @@
 #include "sokoban.h"
 
+#pragma comment (lib,"dwrite.lib")
+
 HRESULT sokoban::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT height)
 {
-
-
-
 	HRESULT hr;
 	hr = D2DFramework::Initialize(hInstance, title, width, height);
 	ThrowIfFailed(hr);
 
-	float posX{ GAME_BEGIN_X }, posY{ GAME_BEGIN_Y };
+	
+	hr = mspRenderTarget->CreateSolidColorBrush(
+		D2D1::ColorF(D2D1::ColorF::Red), mspBrush.GetAddressOf()
+	);
+	ThrowIfFailed(hr);
 
-	for (int x = 0; x < START_COLUM; x++)
-	{
-		posY = GAME_BEGIN_Y;
-		for (int y = 0; y < START_ROW; y++)
-		{
-			if (posX == GAME_BEGIN_X || posY == GAME_BEGIN_Y ||
-				x == (START_COLUM-1) || y == (START_ROW-1))
-			{
-				mspSokoban_Block.push_back(std::make_unique<Actor>(this, L"Data/Game_Block.png", posX, posY));
-			}
-			else
-			{
-				mspSokoban_BG.push_back(std::make_unique<Actor>(this, L"Data/Game_Ground.png", posX, posY));
-			}
-			posY += BOX_SIZE;
-		}
-		posX += BOX_SIZE;
-	}
-	mspSokoban_Player = std::make_unique<player>(this);
+	hr = DWriteCreateFactory(
+		DWRITE_FACTORY_TYPE_SHARED,
+		__uuidof(IDWriteFactory),
+		reinterpret_cast<IUnknown**> (mspDWriteFactroy.GetAddressOf())
+	);
+	ThrowIfFailed(hr);
+	hr = mspDWriteFactroy->CreateTextFormat(
+		L"Gabriola",
+		NULL,
+		DWRITE_FONT_WEIGHT_HEAVY,
+		DWRITE_FONT_STYLE_NORMAL,
+		DWRITE_FONT_STRETCH_NORMAL,
+		30,
+		L"test",
+		mspWForamt.GetAddressOf());
+	ThrowIfFailed(hr);
 
-	for (int i = 0; i < 3; i++)
-	{
-		mspSokoban_Box.push_back(std::make_unique<Box>(this));
-		mspSokoban_Point.push_back(std::make_unique<Point>(this));
-	}
-
-	mPlayerStatus = mspSokoban_Player->GetStatus();
+	GameStart();
 	return S_OK;
 }
 
 void sokoban::Release()
 {
-	mspSokoban_Player.reset();
-	for (auto& e : mspSokoban_Point)
-	{
-		e.reset();
-	}
-	for (auto& e : mspSokoban_Box)
-	{
-		e.reset();
-	}
-
-
-	for (auto& e : mspSokoban_Block)
-	{
-		e.reset();
-	}
-
-	for (auto& e : mspSokoban_BG)
-	{
-		e.reset();
-	}
-
-
-
+	Reset();
 	D2DFramework::Release();
 }
 
 void sokoban::Render()
 {
-	HRESULT hr;
 
 	mspRenderTarget->BeginDraw();
 	mspRenderTarget->Clear(D2D1::ColorF(0.0f, 0.2f, 0.4f, 1.0f));
 	mspRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
+	Check(mspSokoban_Box, mspSokoban_Point);
+	std::wstring text_Move{ L"이동은 W,A,S,D" };
+	std::wstring text_BoxCount{ L"남은 Box의 수 :" };
+	std::wstring text_Reset{ L"Reset은 R키 꾹!" };
+	mspRenderTarget->DrawText(
+		text_Move.c_str(),
+		static_cast<UINT32>(text_Move.size()),
+		mspWForamt.Get(),
+		D2D1::RectF(0.0f, 0.0f, 100.0f, 100.0f),
+		mspBrush.Get()
 
+	);
+	mspRenderTarget->DrawText(
+		text_BoxCount.c_str(),
+		static_cast<UINT32>(text_BoxCount.size()),
+		mspWForamt.Get(),
+		D2D1::RectF(700.0f, 10.0f, 900.0f, 100.0f),
+		mspBrush.Get()
+	);
+	mspRenderTarget->DrawTextW(
+		std::to_wstring(mspSokoban_Box.size()).c_str(),
+		static_cast<UINT32>(mspSokoban_Box.size()),
+		mspWForamt.Get(),
+		D2D1::RectF(1000.0f, 0.0f, 900.0f, 100.0f),
+		mspBrush.Get()
+	);
+	mspRenderTarget->DrawTextW(
+		text_Reset.c_str(),
+		static_cast<UINT32>(text_Reset.size()),
+		mspWForamt.Get(),
+		D2D1::RectF(400.0f, 0.0f, 900.0f, 100.0f),
+		mspBrush.Get()
+	);
 
 	for (auto& e : mspSokoban_BG)
 	{
@@ -96,7 +99,7 @@ void sokoban::Render()
 	{
 		e->Draw();
 	}
-	Check(mspSokoban_Box, mspSokoban_Point);
+
 	mspSokoban_Player->Draw();
 	mspRenderTarget->EndDraw();
 }
@@ -117,7 +120,16 @@ int sokoban::GameLoop()
 			}
 			if (msg.message == WM_KEYDOWN)
 			{
-				if (MoveBox(msg.wParam))
+				if (msg.wParam == 0x52)
+				{
+					resetCount++;
+					if (resetCount > 5)
+					{
+						Reset();
+						GameStart();
+					}
+				}
+				else if (MoveBox(msg.wParam))
 				{
 					mspSokoban_Player->Move(msg.wParam);
 				}
@@ -168,7 +180,6 @@ bool sokoban::MoveBox(WPARAM key)
 			if ((boxRect.left == playerRect.right && boxRect.top == playerRect.top) &&key == 0x44)
 			{
 				e->Move(mspSokoban_Box, key);
-
 				return false;
 			}
 			break;
@@ -193,4 +204,85 @@ void sokoban::Check(std::list<std::unique_ptr<Box>>& boxList, std::list<std::uni
 			}
 		}
 	}
+	if (boxList.empty())
+	{
+		if (MessageBox(this->GetWindowHandle(), L"게임이 끝났습니다! \n"
+			L"게임을 종료 하시겠습니까?", L"END GAME", MB_ICONQUESTION | MB_YESNO) == IDYES)
+		{
+			DestroyWindow(this->GetWindowHandle());
+		}
+		else
+		{
+			if (MessageBox(this->GetWindowHandle(), L"게임을 다시 하시겠습니까?", L"CHECK", MB_YESNO) == IDYES)
+			{
+				Reset();
+				GameStart();
+			}
+			else
+			{
+				DestroyWindow(this->GetWindowHandle());
+			}
+		}
+	}
+}
+
+void sokoban::GameStart()
+{
+	resetCount = 0;
+	float posX{ GAME_BEGIN_X }, posY{ GAME_BEGIN_Y };
+
+	for (int x = 0; x < START_COLUM; x++)
+	{
+		posY = GAME_BEGIN_Y;
+		for (int y = 0; y < START_ROW; y++)
+		{
+			if (posX == GAME_BEGIN_X || posY == GAME_BEGIN_Y ||
+				x == (START_COLUM - 1) || y == (START_ROW - 1))
+			{
+				mspSokoban_Block.push_back(std::make_unique<Actor>(this, L"Data/Game_Block.png", posX, posY));
+			}
+			else
+			{
+				mspSokoban_BG.push_back(std::make_unique<Actor>(this, L"Data/Game_Ground.png", posX, posY));
+			}
+			posY += BOX_SIZE;
+		}
+		posX += BOX_SIZE;
+	}
+	
+
+	for (int i = 0; i < 3; i++)
+	{
+		mspSokoban_Box.push_back(std::make_unique<Box>(this));
+		mspSokoban_Point.push_back(std::make_unique<Point>(this));
+	}
+	mspSokoban_Player = std::make_unique<player>(this);
+	mPlayerStatus = mspSokoban_Player->GetStatus();
+}
+
+void sokoban::Reset()
+{
+	mspSokoban_Player.reset();
+	for (auto& e : mspSokoban_Point)
+	{
+		e.reset();
+	}
+	mspSokoban_Point.clear();
+	for (auto& e : mspSokoban_Box)
+	{
+		e.reset();
+	}
+	mspSokoban_Box.clear();
+
+	for (auto& e : mspSokoban_Block)
+	{
+		e.reset();
+	}
+	mspSokoban_Block.clear();
+
+	for (auto& e : mspSokoban_BG)
+	{
+		e.reset();
+	}
+	mspSokoban_BG.clear();
 }

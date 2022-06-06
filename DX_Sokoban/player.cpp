@@ -75,9 +75,6 @@ void player::Move(WPARAM key)
 				mX -= BOX_SIZE;
 			}
 			
-			std::wostringstream oss;
-			oss << mX << "," << mY << std::endl;
-			OutputDebugString(oss.str().c_str());
 		}
 		break;
 	case 0x57:	//W
@@ -92,9 +89,6 @@ void player::Move(WPARAM key)
 			{
 				mY -= BOX_SIZE ;
 			}
-			std::wostringstream oss;
-			oss << mX << "," << mY << std::endl;
-			OutputDebugString(oss.str().c_str());
 		}
 		break;
 	case 0x53:	//S
@@ -108,9 +102,6 @@ void player::Move(WPARAM key)
 			{
 				mY += BOX_SIZE;
 			}
-			std::wostringstream oss;
-			oss << mX << "," << mY << std::endl;
-			OutputDebugString(oss.str().c_str());
 			
 		}
 		
@@ -126,10 +117,6 @@ void player::Move(WPARAM key)
 			{
 				mX += BOX_SIZE;
 			}
-			
-			std::wostringstream oss;
-			oss << mX << "," << mY << std::endl;
-			OutputDebugString(oss.str().c_str());
 		}
 		break;
 	default:
