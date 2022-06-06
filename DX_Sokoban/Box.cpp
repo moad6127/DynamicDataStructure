@@ -6,8 +6,8 @@ Box::Box(D2DFramework* pFramework) :Actor(pFramework, L"Data/Game_Box.png")
 	std::random_device rd;
 	std::mt19937 gen(rd());
 
-	std::uniform_int_distribution<> distX(1, 11);
-	std::uniform_int_distribution<>distY(1,7 );
+	std::uniform_int_distribution<> distX(2, 10);
+	std::uniform_int_distribution<>distY(2,6 );
 
 	mX = (GAME_BEGIN_X + static_cast<float> (distX(gen)) * BOX_SIZE);
 	mY = (GAME_BEGIN_Y + static_cast<float> (distY(gen)) * BOX_SIZE);
@@ -47,25 +47,94 @@ void Box::Draw()
 
 }
 
-bool Box::MoveCheck(WPARAM key)
+void Box::Move(std::list<std::unique_ptr<Box>>& checklist, WPARAM key)
 {
 	switch (key)
 	{
 	case 0x41://A
-		mX -= BOX_SIZE;
+		if (MoveCheck(checklist,key))
+		{
+			mX -= BOX_SIZE;
+		}
 		break;
 	case 0x57://W
-		mY -= BOX_SIZE;
+
+		if (MoveCheck(checklist, key))
+		{
+			mY -= BOX_SIZE;
+		}
+		
 		break;
 	case 0x53://S
-		mY += BOX_SIZE;
+
+		if (MoveCheck(checklist, key))
+		{
+			mY += BOX_SIZE;
+		}
+		
 		break;
 	case 0x44://D
-		mX += BOX_SIZE;
+
+		if (MoveCheck(checklist, key))
+		{
+			mX += BOX_SIZE;
+		}
+		
 		break;
 
 	default:
 		break;
 	}
-	return false;
+}
+
+bool Box::MoveCheck(std::list<std::unique_ptr<Box>>& checklist, WPARAM key)
+{
+
+	switch (key)
+	{
+	case 0x41://A
+		for (auto& e : checklist)
+		{
+			if ((e->GetX() == (mX - BOX_SIZE) && e->GetY() == mY) || mX == BOX_X_LEFT)
+			{
+				return false;
+			}
+		}
+
+		break;
+	case 0x57://W
+		for (auto& e : checklist)
+		{
+			if ((e->GetY() == (mY - BOX_SIZE) && e->GetX() == mX) || mY == BOX_Y_TOP)
+			{
+				return false;
+			}
+		}
+		
+
+		break;
+	case 0x53://S
+		for (auto& e : checklist)
+		{
+			if ((e->GetY() == (mY + BOX_SIZE) && e->GetX() == mX) || mY == BOX_Y_BOTTOM)
+			{
+				return false;
+			}
+		}
+		
+
+		break;
+	case 0x44://D
+		for (auto& e : checklist)
+		{
+			if ((e->GetX() == (mX + BOX_SIZE) && e->GetY() == mY) || mX == BOX_X_RIGHT)
+			{
+				return false;
+			}
+		}
+
+	default:
+		break;
+	}
+	return true;
 }
