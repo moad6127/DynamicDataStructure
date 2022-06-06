@@ -31,9 +31,10 @@ HRESULT sokoban::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT
 	}
 	mspSokoban_Player = std::make_unique<player>(this);
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		mspSokoban_Box.push_back(std::make_unique<Box>(this));
+		mspSokoban_Point.push_back(std::make_unique<Point>(this));
 	}
 
 	mPlayerStatus = mspSokoban_Player->GetStatus();
@@ -42,11 +43,16 @@ HRESULT sokoban::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT
 
 void sokoban::Release()
 {
+	mspSokoban_Player.reset();
+	for (auto& e : mspSokoban_Point)
+	{
+		e.reset();
+	}
 	for (auto& e : mspSokoban_Box)
 	{
 		e.reset();
 	}
-	mspSokoban_Player.reset();
+
 
 	for (auto& e : mspSokoban_Block)
 	{
@@ -81,12 +87,17 @@ void sokoban::Render()
 	{
 		e->Draw();
 	}
-	mspSokoban_Player->Draw();
+
 	for (auto& e : mspSokoban_Box)
 	{
 		e->Draw();
 	}
-
+	for (auto& e : mspSokoban_Point)
+	{
+		e->Draw();
+	}
+	Check(mspSokoban_Box, mspSokoban_Point);
+	mspSokoban_Player->Draw();
 	mspRenderTarget->EndDraw();
 }
 
@@ -106,7 +117,7 @@ int sokoban::GameLoop()
 			}
 			if (msg.message == WM_KEYDOWN)
 			{
-				if (MoveCheck(msg.wParam))
+				if (MoveBox(msg.wParam))
 				{
 					mspSokoban_Player->Move(msg.wParam);
 				}
@@ -123,7 +134,7 @@ int sokoban::GameLoop()
 	return static_cast<int>(msg.wParam);
 }
 
-bool sokoban::MoveCheck(WPARAM key)
+bool sokoban::MoveBox(WPARAM key)
 {
 	for (auto& e : mspSokoban_Box)
 	{
@@ -157,6 +168,7 @@ bool sokoban::MoveCheck(WPARAM key)
 			if ((boxRect.left == playerRect.right && boxRect.top == playerRect.top) &&key == 0x44)
 			{
 				e->Move(mspSokoban_Box, key);
+
 				return false;
 			}
 			break;
@@ -164,4 +176,21 @@ bool sokoban::MoveCheck(WPARAM key)
 	}
 
 	return true;
+}
+
+void sokoban::Check(std::list<std::unique_ptr<Box>>& boxList, std::list<std::unique_ptr<Point>>& pointList)
+{
+	for (auto& point : pointList)
+	{
+		for (auto& box : boxList)
+		{
+			if ((point->GetRect().top == box->GetRect().top && point->GetRect().left == box->GetRect().left)
+				&& !(point->GetCheck()))
+			{
+				point->CheckTrue();
+				boxList.remove(box);
+				return;
+			}
+		}
+	}
 }

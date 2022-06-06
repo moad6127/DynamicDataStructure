@@ -6,6 +6,7 @@
 #include "D2DFramework.h"
 #include "player.h"
 #include "Box.h"
+#include "Point.h"
 
 
 class sokoban : public D2DFramework
@@ -22,6 +23,7 @@ protected:
 	std::list<std::unique_ptr<Actor>> mspSokoban_Block;
 	std::unique_ptr<player> mspSokoban_Player;
 	std::list<std::unique_ptr<Box>> mspSokoban_Box;
+	std::list<std::unique_ptr<Point>> mspSokoban_Point;
 
 	Status mPlayerStatus;
 
@@ -35,7 +37,9 @@ public:
 
 	virtual int GameLoop() override;
 
-	virtual bool MoveCheck(WPARAM key);
+	virtual bool MoveBox(WPARAM key);
+
+	virtual void Check(std::list<std::unique_ptr<Box>>& boxList, std::list<std::unique_ptr<Point>>& pointList);
 
 };
 

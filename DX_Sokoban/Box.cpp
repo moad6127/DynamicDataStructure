@@ -95,7 +95,7 @@ bool Box::MoveCheck(std::list<std::unique_ptr<Box>>& checklist, WPARAM key)
 	case 0x41://A
 		for (auto& e : checklist)
 		{
-			if ((e->GetX() == (mX - BOX_SIZE) && e->GetY() == mY) || mX == BOX_X_LEFT)
+			if ((e->GetRect().left == (mX - BOX_SIZE) && e->GetRect().top == mY) || mX == BOX_X_LEFT)
 			{
 				return false;
 			}
@@ -105,7 +105,7 @@ bool Box::MoveCheck(std::list<std::unique_ptr<Box>>& checklist, WPARAM key)
 	case 0x57://W
 		for (auto& e : checklist)
 		{
-			if ((e->GetY() == (mY - BOX_SIZE) && e->GetX() == mX) || mY == BOX_Y_TOP)
+			if ((e->GetRect().top == (mY - BOX_SIZE) && e->GetRect().left == mX) || mY == BOX_Y_TOP)
 			{
 				return false;
 			}
@@ -116,7 +116,7 @@ bool Box::MoveCheck(std::list<std::unique_ptr<Box>>& checklist, WPARAM key)
 	case 0x53://S
 		for (auto& e : checklist)
 		{
-			if ((e->GetY() == (mY + BOX_SIZE) && e->GetX() == mX) || mY == BOX_Y_BOTTOM)
+			if ((e->GetRect().top == (mY + BOX_SIZE) && e->GetRect().left == mX) || mY == BOX_Y_BOTTOM)
 			{
 				return false;
 			}
@@ -127,7 +127,7 @@ bool Box::MoveCheck(std::list<std::unique_ptr<Box>>& checklist, WPARAM key)
 	case 0x44://D
 		for (auto& e : checklist)
 		{
-			if ((e->GetX() == (mX + BOX_SIZE) && e->GetY() == mY) || mX == BOX_X_RIGHT)
+			if ((e->GetRect().left == (mX + BOX_SIZE) && e->GetRect().top == mY) || mX == BOX_X_RIGHT)
 			{
 				return false;
 			}

@@ -27,7 +27,5 @@ public:
 
 	inline D2D1_RECT_F GetRect() { return mBox_Position; }
 	inline void SetMoveCheck(bool check) { mMoveCheck = check; }
-	inline float GetX() { return mX; }
-	inline float GetY() { return mY; }
 };
 

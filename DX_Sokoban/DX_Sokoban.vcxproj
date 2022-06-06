@@ -146,6 +146,7 @@
     <ClCompile Include="D2DFramework.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="sokoban.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -155,6 +156,7 @@
     <ClInclude Include="ComExecption.h" />
     <ClInclude Include="D2DFramework.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="Point.h" />
     <ClInclude Include="sokoban.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
