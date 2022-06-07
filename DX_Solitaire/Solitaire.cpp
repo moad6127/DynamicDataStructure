@@ -70,7 +70,7 @@ void Solitaire::Render()
 
 	mspRenderTarget->DrawText(
 		L"클릭수 :",
-		7,
+		6,
 		mspWForamt.Get(),
 		D2D1::RectF(895.0f, 20.0f, 1000.0f, 60.0f), mspBrush.Get()
 	);
@@ -118,25 +118,28 @@ void Solitaire::onClick(int mouseX, int mouseY)
 			}
 			else if (pCard->GetType() == mpSelectedCrad->GetType())
 			{
-				//Lamda ,remove_if를 쓰면 오류가 생겨서 
-				//for문으로 타입이 같은것을 제거하기
 
-				for (auto& card : mCardList)
-				{
-					if (card->GetIndex() == pCard->GetIndex())
+				//for (auto& card : mCardList)
+				//{
+				//	if (card->GetIndex() == pCard->GetIndex())
+				//	{
+				//		mCardList.remove(card);
+				//		break;
+				//	}
+				//}
+				//for (auto& card : mCardList)
+				//{
+				//	if (card->GetIndex() == mpSelectedCrad->GetIndex())
+				//	{
+				//		mCardList.remove(card);
+				//		break;
+				//	}
+				//}
+				mCardList.remove_if([&](auto& card)
 					{
-						mCardList.remove(card);
-						break;
-					}
-				}
-				for (auto& card : mCardList)
-				{
-					if (card->GetIndex() == mpSelectedCrad->GetIndex())
-					{
-						mCardList.remove(card);
-						break;
-					}
-				}
+						return pCard->GetIndex() == card->GetIndex() || mpSelectedCrad->GetIndex() == card->GetIndex();
+					});
+
 				mpSelectedCrad = nullptr;
 			}
 			else
