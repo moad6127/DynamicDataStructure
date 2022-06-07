@@ -2,10 +2,13 @@
 
 #include<memory>
 #include<list>
+#include<dwrite.h>
+
 
 #include"D2DFramework.h"
 #include"Card.h"
-#include<dwrite.h>
+#include"Text.h"
+
 
 class Solitaire : public D2DFramework
 {
@@ -21,8 +24,11 @@ protected:
 	Microsoft::WRL::ComPtr<IDWriteFactory> mspDWriteFactroy;
 	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> mspBrush;
 	Microsoft::WRL::ComPtr<IDWriteTextFormat> mspWForamt;
+	std::unique_ptr<Text> mspText_Click;
+	std::unique_ptr<Text> mspText_ClickCount;
 
 	int mFlipCount;
+	
 
 public:
 	virtual HRESULT Initialize(HINSTANCE hInstance, LPCWSTR title = L"Buggy House",

@@ -12,29 +12,30 @@ HRESULT Solitaire::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UI
 	hr = D2DFramework::Initialize(hInstance, title, width, height);
 	ThrowIfFailed(hr);
 
-	hr = mspRenderTarget->CreateSolidColorBrush(
-		D2D1::ColorF(D2D1::ColorF::Red), mspBrush.GetAddressOf()
-	);
-	ThrowIfFailed(hr);
+	//hr = mspRenderTarget->CreateSolidColorBrush(
+	//	D2D1::ColorF(D2D1::ColorF::Red), mspBrush.GetAddressOf()
+	//);
+	//ThrowIfFailed(hr);
 
-	hr = DWriteCreateFactory(
-		DWRITE_FACTORY_TYPE_SHARED,
-		__uuidof(IDWriteFactory),
-		reinterpret_cast<IUnknown**> (mspDWriteFactroy.GetAddressOf())
-	);
-	ThrowIfFailed(hr);
-	hr = mspDWriteFactroy->CreateTextFormat(
-		L"Gabriola",
-		NULL,
-		DWRITE_FONT_WEIGHT_HEAVY,
-		DWRITE_FONT_STYLE_NORMAL,
-		DWRITE_FONT_STRETCH_NORMAL,
-		30,
-		L"test",
-		mspWForamt.GetAddressOf());
-	ThrowIfFailed(hr);
-
-
+	//hr = DWriteCreateFactory(
+	//	DWRITE_FACTORY_TYPE_SHARED,
+	//	__uuidof(IDWriteFactory),
+	//	reinterpret_cast<IUnknown**> (mspDWriteFactroy.GetAddressOf())
+	//);
+	//ThrowIfFailed(hr);
+	//hr = mspDWriteFactroy->CreateTextFormat(
+	//	L"Gabriola",
+	//	NULL,
+	//	DWRITE_FONT_WEIGHT_HEAVY,
+	//	DWRITE_FONT_STYLE_NORMAL,
+	//	DWRITE_FONT_STRETCH_NORMAL,
+	//	30,
+	//	L"test",
+	//	mspWForamt.GetAddressOf());
+	//ThrowIfFailed(hr);
+	mspText_Click = std::make_unique<Text>(this, 890.0f, 20.0f, 1000.0f, 60.0f, L"클릭수 : ");
+	mspText_ClickCount = std::make_unique<Text>(this, 895.0f, 60.0f, 1000.0f, 100.0f,
+		std::to_wstring(mFlipCount).c_str());
 	//예제에서  초기화 필요한것
 	mActor_BG = std::make_unique<Actor>(this, L"Data/bg_blank.png");
 
@@ -59,7 +60,7 @@ void Solitaire::Render()
 	mspRenderTarget->BeginDraw();
 
 	mspRenderTarget->Clear(D2D1::ColorF(0.0f, 0.2f, 0.4f, 1.0f));
-	
+	mspRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 
 	//예제에서 그릴것들
 	mActor_BG->Draw();
@@ -68,7 +69,7 @@ void Solitaire::Render()
 		e->Draw();
 	}
 
-	mspRenderTarget->DrawText(
+	/*mspRenderTarget->DrawText(
 		L"클릭수 :",
 		6,
 		mspWForamt.Get(),
@@ -80,8 +81,9 @@ void Solitaire::Render()
 		mspWForamt.Get(),
 		D2D1::RectF(895.0f, 60.0f, 1000.0f, 100.0f),
 		mspBrush.Get()
-	);
-
+	);*/
+	mspText_Click->Draw();
+	mspText_ClickCount->Draw(mFlipCount);
 	hr = mspRenderTarget->EndDraw();
 	if (hr == D2DERR_RECREATE_TARGET)
 	{

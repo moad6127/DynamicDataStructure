@@ -29,24 +29,23 @@ Card::Card(D2DFramework* pFramework, int index, TYPE type, float x , float y) : 
 
 void Card::Draw()
 {
+	auto pRT = mpFramework->GetRenderTarget();
+	auto size = mpBitmap->GetPixelSize();
+	D2D1_RECT_F rect{
+	0.0f, 0.0f,
+	static_cast<float>(0.0f+ size.width),
+	static_cast<float>(0.0f + size.height)
+	};
+	auto matTranslate = D2D1::Matrix3x2F::Translation(mX, mY);
+	pRT->SetTransform( matTranslate);
 	//TODO 뒷면이면 뒷배경 앞면이면 타입에따라서 이미지
 	if (mIsFront)
 	{
-		auto pRT = mpFramework->GetRenderTarget();
-		auto size = mpBitmap->GetPixelSize();
-		D2D1_RECT_F rect{
-		mX, mY,
-		static_cast<float>(mX + size.width),
-		static_cast<float>(mY + size.height)
-		};
-		pRT->DrawBitmap(
-			pCardFront,
-			rect,
-			1.0f);
+		pRT->DrawBitmap(pCardFront, rect, mOpacity);
 	}
 	else
 	{
-		Actor::Draw();
+		pRT->DrawBitmap(mpBitmap, rect, mOpacity);
 	}
 	
 }
