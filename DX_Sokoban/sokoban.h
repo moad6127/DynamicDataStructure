@@ -8,6 +8,7 @@
 #include "player.h"
 #include "Box.h"
 #include "Point.h"
+#include "Text.h"
 
 
 class sokoban : public D2DFramework
@@ -29,9 +30,11 @@ protected:
 	Status mPlayerStatus;
 
 
-	Microsoft::WRL::ComPtr<IDWriteFactory> mspDWriteFactroy;
-	Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> mspBrush;
-	Microsoft::WRL::ComPtr<IDWriteTextFormat> mspWForamt;
+	//Microsoft::WRL::ComPtr<IDWriteFactory> mspDWriteFactroy;
+	//Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> mspBrush;
+	//Microsoft::WRL::ComPtr<IDWriteTextFormat> mspWForamt;
+	std::unique_ptr<Text> mspText;
+
 	int resetCount;
 
 public:

@@ -148,6 +148,7 @@
     <ClCompile Include="player.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="sokoban.cpp" />
+    <ClCompile Include="Text.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Actor.h" />
@@ -158,6 +159,7 @@
     <ClInclude Include="player.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="sokoban.h" />
+    <ClInclude Include="Text.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -9,7 +9,7 @@ HRESULT sokoban::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT
 	ThrowIfFailed(hr);
 
 	
-	hr = mspRenderTarget->CreateSolidColorBrush(
+	/*hr = mspRenderTarget->CreateSolidColorBrush(
 		D2D1::ColorF(D2D1::ColorF::Red), mspBrush.GetAddressOf()
 	);
 	ThrowIfFailed(hr);
@@ -29,9 +29,10 @@ HRESULT sokoban::Initialize(HINSTANCE hInstance, LPCWSTR title, UINT width, UINT
 		30,
 		L"test",
 		mspWForamt.GetAddressOf());
-	ThrowIfFailed(hr);
-
+	ThrowIfFailed(hr);*/
+	
 	GameStart();
+	mspText = std::make_unique<Text>(this);
 	return S_OK;
 }
 
@@ -46,42 +47,51 @@ void sokoban::Render()
 
 	mspRenderTarget->BeginDraw();
 	mspRenderTarget->Clear(D2D1::ColorF(0.0f, 0.2f, 0.4f, 1.0f));
-	mspRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
+	
 
 	Check(mspSokoban_Box, mspSokoban_Point);
 	std::wstring text_Move{ L"이동은 W,A,S,D" };
 	std::wstring text_BoxCount{ L"남은 Box의 수 :" };
 	std::wstring text_Reset{ L"Reset은 R키 꾹!" };
-	mspRenderTarget->DrawText(
-		text_Move.c_str(),
-		static_cast<UINT32>(text_Move.size()),
-		mspWForamt.Get(),
-		D2D1::RectF(0.0f, 0.0f, 100.0f, 100.0f),
-		mspBrush.Get()
+	mspText->TextDraw(text_Move.c_str(), static_cast<UINT> (text_Move.size()), 0.0f, 0.0f, 100.0f, 100.0f);
+	//mspRenderTarget->DrawText(
+	//	text_Move.c_str(),
+	//	static_cast<UINT32>(text_Move.size()),
+	//	mspWForamt.Get(),
+	//	D2D1::RectF(0.0f, 0.0f, 100.0f, 100.0f),
+	//	mspBrush.Get()
 
-	);
-	mspRenderTarget->DrawText(
-		text_BoxCount.c_str(),
-		static_cast<UINT32>(text_BoxCount.size()),
-		mspWForamt.Get(),
-		D2D1::RectF(700.0f, 10.0f, 900.0f, 100.0f),
-		mspBrush.Get()
-	);
-	mspRenderTarget->DrawTextW(
-		std::to_wstring(mspSokoban_Box.size()).c_str(),
-		static_cast<UINT32>(mspSokoban_Box.size()),
-		mspWForamt.Get(),
-		D2D1::RectF(1000.0f, 0.0f, 900.0f, 100.0f),
-		mspBrush.Get()
-	);
-	mspRenderTarget->DrawTextW(
-		text_Reset.c_str(),
-		static_cast<UINT32>(text_Reset.size()),
-		mspWForamt.Get(),
-		D2D1::RectF(400.0f, 0.0f, 900.0f, 100.0f),
-		mspBrush.Get()
-	);
+	//);
 
+	mspText->TextDraw(text_BoxCount.c_str(),
+		static_cast<UINT> (text_BoxCount.size()),
+		700.0f, 10.0f, 900.0f, 100.0f);
+	//mspRenderTarget->DrawText(
+	//	text_BoxCount.c_str(),
+	//	static_cast<UINT32>(text_BoxCount.size()),
+	//	mspWForamt.Get(),
+	//	D2D1::RectF(700.0f, 10.0f, 900.0f, 100.0f),
+	//	mspBrush.Get()
+	//);
+	
+	mspText->TextDraw(static_cast<int>(mspSokoban_Box.size()), 900.0f, 0.0f, 900.0f, 100.0f);
+	//mspRenderTarget->DrawTextW(
+	//	std::to_wstring(mspSokoban_Box.size()).c_str(),
+	//	static_cast<UINT32>(mspSokoban_Box.size()),
+	//	mspWForamt.Get(),
+	//	D2D1::RectF(1000.0f, 0.0f, 900.0f, 100.0f),
+	//	mspBrush.Get()
+	//);
+	
+	mspText->TextDraw(text_Reset.c_str(), static_cast<UINT>(text_Reset.size()), 400.0f, 0.0f, 900.0f, 100.0f);
+	//mspRenderTarget->DrawTextW(
+	//	text_Reset.c_str(),
+	//	static_cast<UINT32>(text_Reset.size()),
+	//	mspWForamt.Get(),
+	//	D2D1::RectF(400.0f, 0.0f, 900.0f, 100.0f),
+	//	mspBrush.Get()
+	//);
+	mspRenderTarget->SetTransform(D2D1::Matrix3x2F::Identity());
 	for (auto& e : mspSokoban_BG)
 	{
 		e->Draw();
@@ -148,6 +158,7 @@ int sokoban::GameLoop()
 
 bool sokoban::MoveBox(WPARAM key)
 {
+	bool output;
 	for (auto& e : mspSokoban_Box)
 	{
 		D2D1_RECT_F boxRect{ e->GetRect() };
@@ -158,35 +169,36 @@ bool sokoban::MoveBox(WPARAM key)
 		case Status::Front:
 			if ((boxRect.top == playerRect.bottom && boxRect.left == playerRect.left ) && key ==0x53)
 			{
-				e->Move(mspSokoban_Box,key);
-				return false;
+				e->Move(mspSokoban_Box, key);
+				output = false;
 			}
 			break;
 		case Status::Back:
 			if ((boxRect.bottom == playerRect.top && boxRect.left == playerRect.left) && key == 0x57)
 			{
 				e->Move(mspSokoban_Box, key);
-				return false;
+				output = false;
 			}
 			break;
 		case Status::Left:
 			if( (boxRect.right == playerRect.left && boxRect.top == playerRect.top) && key == 0x41)
 			{
 				e->Move(mspSokoban_Box, key);
-				return false;
+				output = false;
 			}
 			break;
 		case Status::Right:
 			if ((boxRect.left == playerRect.right && boxRect.top == playerRect.top) &&key == 0x44)
 			{
 				e->Move(mspSokoban_Box, key);
-				return false;
+				output = false;
 			}
 			break;
 		}
 	}
 
-	return true;
+	output = true;
+	return output;
 }
 
 void sokoban::Check(std::list<std::unique_ptr<Box>>& boxList, std::list<std::unique_ptr<Point>>& pointList)
